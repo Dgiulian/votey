@@ -1,9 +1,11 @@
 import * as trpc from "@trpc/server";
-import { z } from "zod";
-import { prisma } from "../../db/client";
+import questionsRouter from "./questions";
+import superjson from "superjson";
 
-export const questionsRouter = trpc.router().query("get-all", {
-  resolve() {
-    return prisma.pollQuestion.findMany();
-  },
-});
+export const appRouter = trpc
+  .router()
+  .transformer(superjson)
+  .merge("questions.", questionsRouter);
+
+// export type definition of API
+export type AppRouter = typeof appRouter;

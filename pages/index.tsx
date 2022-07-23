@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = ({}) => {
-  const { data, isLoading, error } = trpc.useQuery(["question.get-all"]);
+  const { data, isLoading, error } = trpc.useQuery(["questions.get-all"]);
 
   if (isLoading || !data) {
     return <div>Loading...</div>;
@@ -16,7 +16,7 @@ const Home: NextPage = ({}) => {
     <div>
       <p>
         {data.map((q) => (
-          <div key={q.id}>{q.question}</div>
+          <span key={q.id}>{q.question}</span>
         ))}
         {process.env.VERCEL_URL}
       </p>
