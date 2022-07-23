@@ -21,17 +21,17 @@ export default Home;
 
 export const getServerSideProps = async () => {
   try {
-    const questions = await prisma.pollQuestion.findMany({});
+    const questions = await prisma.pollQuestion.findMany();
     console.log(questions);
     return {
       props: {
         questions: JSON.stringify(questions),
       },
     };
-  } catch (error) {
+  } catch (error: any) {
     return {
       props: {
-        error: JSON.stringify(error),
+        error: error.message,
       },
     };
   }
