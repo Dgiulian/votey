@@ -9,6 +9,14 @@ const questionsRouter = trpc
       return prisma.pollQuestion.findMany();
     },
   })
+  .query("get-by-id", {
+    input: z.object({
+      id: z.string(),
+    }),
+    resolve({ input }) {
+      return prisma.pollQuestion.findFirst({ where: { id: input.id } });
+    },
+  })
   .mutation("create", {
     input: z.object({
       question: z.string().min(10).max(5000),

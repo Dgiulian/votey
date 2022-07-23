@@ -21,7 +21,11 @@ const Home: NextPage = ({}) => {
       <Link href="/create">Create</Link>
       <ul>
         {data.map((q) => (
-          <li key={q.id}>{q.question}</li>
+          <li key={q.id}>
+            {q.question}
+
+            <Link href={`/question/${q.id}`}>View</Link>
+          </li>
         ))}
         {process.env.VERCEL_URL}
       </ul>
