@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import Link from "next/link";
 
 import { trpc } from "../utils/trpc";
 
@@ -12,14 +13,18 @@ const Home: NextPage = ({}) => {
     return <div>Something bad happened...</div>;
   }
 
+  console.log(data);
+
   return (
     <div>
-      <p>
+      <h1>Open questions</h1>
+      <Link href="/create">Create</Link>
+      <ul>
         {data.map((q) => (
-          <span key={q.id}>{q.question}</span>
+          <li key={q.id}>{q.question}</li>
         ))}
         {process.env.VERCEL_URL}
-      </p>
+      </ul>
     </div>
   );
 };
