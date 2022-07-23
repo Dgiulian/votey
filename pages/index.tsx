@@ -6,12 +6,7 @@ const Home: NextPage = ({}) => {
   const { data, isLoading, error } = trpc.useQuery(["question.get-all"]);
 
   if (isLoading || !data) {
-    return (
-      <div>
-        Loading...
-        {process.env.VERCEL_URL}
-      </div>
-    );
+    return <div>Loading...</div>;
   }
   if (error) {
     return <div>Something bad happened...</div>;
