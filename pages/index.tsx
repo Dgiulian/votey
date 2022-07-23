@@ -1,38 +1,26 @@
 import type { NextPage } from "next";
 
-import { prisma } from "../db/client";
-import styles from "../styles/Home.module.css";
+import { trpc } from "../utils/trpc";
 
-interface HomeProps {
-  error: any;
-  questions: any[];
-}
+const Home: NextPage = ({}) => {
+  const { data, isLoading, error } = trpc.useQuery(["question.get-all"]);
 
-const Home: NextPage<Partial<HomeProps>> = ({ questions, error }) => {
+  if (isLoading || !data) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Something bad happened...</div>;
+  }
+
   return (
-    <div className={styles.container}>
-      <div>{questions ? "Successufully connected" : "An error occurred"}</div>
-      <pre>{questions ? questions : error}</pre>
+    <div>
+      <p>
+        {data.map((q) => (
+          <div key={q.id}>{q.question}</div>
+        ))}
+      </p>
     </div>
   );
 };
 
 export default Home;
-
-export const getServerSideProps = async () => {
-  try {
-    const questions = await prisma.pollQuestion.findMany();
-    console.log(questions);
-    return {
-      props: {
-        questions: JSON.stringify(questions),
-      },
-    };
-  } catch (error: any) {
-    return {
-      props: {
-        error: `${error.message}: ${process.env.DATABASE_URL}`,
-      },
-    };
-  }
-};
