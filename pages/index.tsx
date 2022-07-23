@@ -31,7 +31,7 @@ export const getServerSideProps = async () => {
   } catch (error: any) {
     return {
       props: {
-        error: error.message,
+        error: `${error.message}: ${process.env.DATABASE_URL}`,
       },
     };
   }
