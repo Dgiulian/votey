@@ -18,6 +18,7 @@ const Home: NextPage = ({}) => {
         {data.map((q) => (
           <div key={q.id}>{q.question}</div>
         ))}
+        {process.env.VERCEL_URL}
       </p>
     </div>
   );
