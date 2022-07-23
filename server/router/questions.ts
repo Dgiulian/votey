@@ -22,7 +22,9 @@ const questionsRouter = trpc
       question: z.string().min(10).max(5000),
     }),
     resolve({ input }) {
-      return prisma.pollQuestion.create({ data: { question: input.question } });
+      return prisma.pollQuestion.create({
+        data: { question: input.question, options: {} },
+      });
     },
   });
 
