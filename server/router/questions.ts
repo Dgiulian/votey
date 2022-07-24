@@ -5,8 +5,13 @@ import { createRouter } from "./context";
 
 const questionsRouter = createRouter()
   .query("get-all", {
-    resolve() {
-      return prisma.pollQuestion.findMany();
+    resolve({ ctx }) {
+      if (!ctx.token) return [];
+      return prisma.pollQuestion.findMany({
+        where: {
+          ownerToken: ctx.token,
+        },
+      });
     },
   })
   .query("get-by-id", {
