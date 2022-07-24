@@ -1,6 +1,6 @@
-import * as trpc from "@trpc/server";
 import { z } from "zod";
 import { prisma } from "../../db/client";
+import { createQuestionValidator } from "../../shared/create-question-validator";
 import { createRouter } from "./context";
 
 const questionsRouter = createRouter()
@@ -30,9 +30,7 @@ const questionsRouter = createRouter()
     },
   })
   .mutation("create", {
-    input: z.object({
-      question: z.string().min(10).max(5000),
-    }),
+    input: createQuestionValidator,
 
     resolve({ input, ctx }) {
       if (!ctx.token) throw new Error("Unauthroized");
