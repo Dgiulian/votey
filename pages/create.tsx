@@ -27,6 +27,7 @@ const CreateQuestionForm = () => {
     handleSubmit,
     control,
     formState: { errors },
+    reset,
   } = useForm<CreateQuestionInputType>({
     resolver: zodResolver(createQuestionValidator),
     defaultValues: {
@@ -39,8 +40,9 @@ const CreateQuestionForm = () => {
       control, // control props comes from useForm (optional: if you are using FormContext)
     });
   const { mutate, isLoading } = trpc.useMutation("questions.create", {
-    onSuccess() {
-      router.push("/");
+    onSuccess(data) {
+      reset();
+      router.push(`/questions/${data.id}`);
     },
   });
 
