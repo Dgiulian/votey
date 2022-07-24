@@ -1,9 +1,9 @@
 import * as trpc from "@trpc/server";
 import questionsRouter from "./questions";
 import superjson from "superjson";
+import { createRouter } from "./context";
 
-export const appRouter = trpc
-  .router()
+export const appRouter = createRouter()
   .transformer(superjson)
   .merge("questions.", questionsRouter);
 

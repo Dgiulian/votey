@@ -1,9 +1,9 @@
 import * as trpc from "@trpc/server";
 import { z } from "zod";
 import { prisma } from "../../db/client";
+import { createRouter } from "./context";
 
-const questionsRouter = trpc
-  .router()
+const questionsRouter = createRouter()
   .query("get-all", {
     resolve() {
       return prisma.pollQuestion.findMany();
@@ -13,17 +13,32 @@ const questionsRouter = trpc
     input: z.object({
       id: z.string(),
     }),
-    resolve({ input }) {
-      return prisma.pollQuestion.findFirst({ where: { id: input.id } });
+    async resolve({ input, ctx }) {
+      console.log(ctx.token);
+      const pollQuestion = await prisma.pollQuestion.findFirst({
+        where: { id: input.id },
+      });
+      return {
+        question: pollQuestion,
+        isOwner: ctx.token === pollQuestion?.ownerToken,
+      };
     },
   })
   .mutation("create", {
     input: z.object({
       question: z.string().min(10).max(5000),
     }),
-    resolve({ input }) {
+
+    resolve({ input, ctx }) {
+      if (!ctx.token) throw new Error("Unauthroized");
+
       return prisma.pollQuestion.create({
-        data: { question: input.question, options: {} },
+        data: {
+          question: input.question,
+          options: [],
+
+          ownerToken: ctx.token,
+        },
       });
     },
   });

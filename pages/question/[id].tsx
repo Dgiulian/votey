@@ -8,18 +8,25 @@ const QuestionPageContent: React.FC<{ id: string }> = ({ id }) => {
     "questions.get-by-id",
     { id },
   ]);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
   if (!data) {
     return <div>No data available</div>;
   }
+  const { question, isOwner } = data;
+
+  if (!question) {
+    return <div>No data available</div>;
+  }
+
   return (
     <div>
-      {data.question}
-
+      {question?.question}
+      {isOwner && <p>You are the owner</p>}
       <ul>
-        {(data?.options as string[])?.map((option) => (
+        {(question?.options as string[])?.map((option) => (
           <li key={option}>{option}</li>
         ))}
       </ul>
