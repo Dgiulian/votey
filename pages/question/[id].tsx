@@ -20,20 +20,21 @@ const QuestionPageContent: React.FC<{ id: string }> = ({ id }) => {
   if (!question) {
     return <div>No data available</div>;
   }
-
   return (
     <div>
       {question?.question}
       {isOwner && <p>You are the owner</p>}
       <ul>
-        {(question?.options as string[])?.map((option) => (
-          <li key={option}>{option}</li>
+        {(question?.options as OptionType[])?.map((option) => (
+          <li key={option.text}>{option.text}</li>
         ))}
       </ul>
     </div>
   );
 };
-
+type OptionType = {
+  text: string;
+};
 function QuestionPage() {
   const { query } = useRouter();
   const { id } = query;
