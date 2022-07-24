@@ -22,10 +22,29 @@ const questionsRouter = createRouter()
       const pollQuestion = await prisma.pollQuestion.findFirst({
         where: { id: input.id },
       });
-      return {
+      const myVote = await prisma.vote.findFirst({
+        where: { voterToken: ctx.token, questionId: input.id },
+      });
+      const rest = {
         question: pollQuestion,
-        isOwner: ctx.token === pollQuestion?.ownerToken,
+        vote: myVote,
+        isOwner: pollQuestion?.ownerToken === ctx.token,
       };
+
+      if (rest.vote || rest.isOwner) {
+        const votes = await prisma.vote.groupBy({
+          where: { questionId: input.id },
+          by: ["choice"],
+          _count: true,
+        });
+
+        return {
+          ...rest,
+          votes,
+        };
+      }
+
+      return { ...rest, votes: undefined };
     },
   })
   .mutation("create", {
@@ -41,6 +60,33 @@ const questionsRouter = createRouter()
 
           ownerToken: ctx.token,
         },
+      });
+    },
+  })
+  .mutation("vote-on-question", {
+    input: z.object({
+      questionId: z.string(),
+      option: z.number(),
+    }),
+    async resolve({ input, ctx }) {
+      if (!ctx.token) throw new Error("Unauthorized");
+
+      // const previousVote = await prisma.vote.findFirst({
+      //   where: { questionId: input.questionId, voterToken: ctx.token },
+      // });
+      // if (previousVote) throw new Error("Already voted");
+
+      await prisma.vote.create({
+        data: {
+          questionId: input.questionId,
+          choice: input.option,
+          voterToken: ctx.token,
+        },
+      });
+      return await prisma.vote.groupBy({
+        where: { questionId: input.questionId },
+        by: ["choice"],
+        _count: true,
       });
     },
   });

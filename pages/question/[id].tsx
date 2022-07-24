@@ -8,27 +8,74 @@ const QuestionPageContent: React.FC<{ id: string }> = ({ id }) => {
     "questions.get-by-id",
     { id },
   ]);
+  const { mutate, isLoading: isVoting } = trpc.useMutation(
+    "questions.vote-on-question",
+    {
+      onSuccess(data) {
+        window.location.reload();
+      },
+    }
+  );
 
+  const handleOnClick = (option: number) => {
+    mutate({
+      questionId: id,
+      option,
+    });
+  };
   if (isLoading) {
     return <div>Loading...</div>;
   }
   if (!data) {
     return <div>No data available</div>;
   }
-  const { question, isOwner } = data;
+  const { question, isOwner, votes } = data;
 
   if (!question) {
     return <div>No data available</div>;
   }
+
+  console.log(data);
+
+  const totalVotes =
+    votes?.reduce((count, vote) => count + vote._count, 0) ?? 0;
+
+  const getVoteByChoice = (option: number) =>
+    votes?.find((vote) => vote.choice === option);
+
   return (
     <div>
-      {question?.question}
-      {isOwner && <p>You are the owner</p>}
-      <ul>
-        {(question?.options as OptionType[])?.map((option) => (
-          <li key={option.text}>{option.text}</li>
-        ))}
-      </ul>
+      <h1>{question?.question}</h1>
+
+      <div>
+        {(question?.options as OptionType[])?.map((option, index) => {
+          if (isOwner || data.vote) {
+            const vote = getVoteByChoice(index);
+            const percentage = ((vote?._count ?? 0) / totalVotes) * 100;
+            return (
+              <div key={option.text}>
+                <div>
+                  {option.text} ({vote?._count})
+                </div>
+                <progress id="file" max={totalVotes} value={vote?._count} />
+                {percentage.toFixed(2)} %
+              </div>
+            );
+          }
+          return (
+            <div key={option.text}>
+              {option.text}
+              <button
+                type="button"
+                disabled={isVoting}
+                onClick={() => handleOnClick(index)}
+              >
+                Vote
+              </button>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
@@ -44,7 +91,6 @@ function QuestionPage() {
   return (
     <div>
       <Link href="/">Home</Link>
-      <h1>Question Page</h1>
       <QuestionPageContent id={id} />
     </div>
   );
