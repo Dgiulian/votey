@@ -1,46 +1,61 @@
 import { useRouter } from "next/router";
 import React from "react";
+import { useForm } from "react-hook-form";
+import {
+  CreateQuestionInputType,
+  createQuestionValidator,
+} from "../shared/create-question-validator";
 import { trpc } from "../utils/trpc";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 type Props = {};
 
 const CreateQuestion = (props: Props) => {
-  const router = useRouter();
-  const [questionText, setQuestionText] = React.useState("");
-  const { mutate: createQuestion, isLoading } = trpc.useMutation(
-    "questions.create",
-    {
-      onSuccess() {
-        setQuestionText("");
-        router.push("/");
-      },
-    }
-  );
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(questionText);
-    try {
-      createQuestion({ question: questionText });
-    } catch (error) {}
-  };
-
   return (
     <div>
       <h1>Create a new question</h1>
 
-      <form action="" onSubmit={handleSubmit}>
+      <CreateQuestionForm />
+    </div>
+  );
+};
+
+const CreateQuestionForm = () => {
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<CreateQuestionInputType>({
+    resolver: zodResolver(createQuestionValidator),
+  });
+  const [questionText, setQuestionText] = React.useState("");
+  const { mutate, isLoading } = trpc.useMutation("questions.create", {
+    onSuccess() {
+      setQuestionText("");
+      router.push("/");
+    },
+  });
+
+  return (
+    <form action="" onSubmit={handleSubmit((data) => mutate(data))}>
+      <div>
         <input
           type="text"
-          value={questionText}
+          {...register("question")}
           disabled={isLoading}
           onChange={(e) => setQuestionText(e.target.value)}
         />
-        <button type="submit" disabled={isLoading}>
-          {isLoading ? "Saving" : "Save"}
-        </button>
-      </form>
-    </div>
+        {errors.question && (
+          <p className="text-red-400">{errors.question.message}</p>
+        )}
+      </div>
+
+      <button type="submit" disabled={isLoading}>
+        {isLoading ? "Saving" : "Save"}
+      </button>
+    </form>
   );
 };
 
