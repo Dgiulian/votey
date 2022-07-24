@@ -19,7 +19,6 @@ const questionsRouter = createRouter()
       id: z.string(),
     }),
     async resolve({ input, ctx }) {
-      console.log(ctx.token);
       const pollQuestion = await prisma.pollQuestion.findFirst({
         where: { id: input.id },
       });

@@ -13,8 +13,6 @@ const Home: NextPage = ({}) => {
     return <div>Something bad happened...</div>;
   }
 
-  console.log(data);
-
   return (
     <div>
       <h1>Open questions</h1>

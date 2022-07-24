@@ -7,8 +7,6 @@ export function middleware(req: NextRequest) {
 
   const random = nanoid();
 
-  console.log(random, req.cookies.entries());
-
   // Redirect (to apply cookie)
   const res = NextResponse.next();
 
