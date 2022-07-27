@@ -17,9 +17,14 @@ const Layout = ({ children }: Props) => {
           {<Navbar />}
         </Header>
       }
-      // styles={(theme) => ({
-      //   main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
-      // })}
+      styles={(theme) => ({
+        main: {
+          backgroundColor:
+            theme.colorScheme === "dark"
+              ? theme.colors["midnight-blue"][8]
+              : theme.colors.gray[0],
+        },
+      })}
     >
       <Head>Votey | Share your opinion</Head>
       <main>

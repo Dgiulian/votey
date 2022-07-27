@@ -7,7 +7,7 @@ function Navbar() {
     <header>
       <Container>
         <nav style={{ display: "flex", justifyContent: "flex-end" }}>
-          <Link href="/create">
+          <Link href="/create" passHref>
             <Button ml="auto">Create</Button>
           </Link>
         </nav>

@@ -1,5 +1,7 @@
+import { Card, Grid, Text, Title } from "@mantine/core";
 import type { NextPage } from "next";
-import Link from "next/link";
+
+import QuestionCard from "../components/question-card";
 
 import { trpc } from "../utils/trpc";
 
@@ -15,17 +17,18 @@ const Home: NextPage = ({}) => {
 
   return (
     <div>
-      <h1>Open questions</h1>
-      <ul>
-        {data.map((q) => (
-          <li key={q.id}>
-            {q.question}
+      <Title order={3} mb="md" color="white">
+        Open questions
+      </Title>
 
-            <Link href={`/question/${q.id}`}>View</Link>
-          </li>
+      <Grid>
+        {data.map((q) => (
+          <Grid.Col span={4} key={q.id}>
+            <QuestionCard question={q} />
+          </Grid.Col>
         ))}
         {process.env.VERCEL_URL}
-      </ul>
+      </Grid>
     </div>
   );
 };
