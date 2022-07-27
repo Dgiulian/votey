@@ -1,7 +1,16 @@
-import { Space, Text } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Group,
+  Progress,
+  Space,
+  Text,
+  Title,
+} from "@mantine/core";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
+import { getPercentage } from "../../utils/misc";
 import { trpc } from "../../utils/trpc";
 
 const QuestionPageContent: React.FC<{ id: string }> = ({ id }) => {
@@ -46,37 +55,46 @@ const QuestionPageContent: React.FC<{ id: string }> = ({ id }) => {
 
   return (
     <div>
-      <h1>{question?.question}</h1>
+      <Title order={1} mb="xl" my="xl">
+        {question?.question}
+      </Title>
 
-      <div>
+      <Box>
         {(question?.options as OptionType[])?.map((option, index) => {
           if (isOwner || data.vote) {
             const vote = getVoteByChoice(index);
-            const percentage = ((vote?._count ?? 0) / totalVotes) * 100;
+            const percentage = getPercentage(vote?._count ?? 0, totalVotes);
+
             return (
-              <div key={option.text}>
-                <div>
-                  {option.text} ({vote?._count})
-                </div>
-                <progress id="file" max={totalVotes} value={vote?._count} />
-                {percentage.toFixed(2)} %
-              </div>
+              <Box key={option.text} mb="xl">
+                <Group>
+                  <Text size="md">{option.text}</Text>
+                  <Text>({vote?._count ?? 0})</Text>
+                </Group>
+
+                <Progress value={percentage} size="md" my="xs" />
+                <Text size="md" my="sm">
+                  {percentage.toFixed(2)} %
+                </Text>
+              </Box>
             );
           }
           return (
             <div key={option.text}>
-              {option.text}
-              <button
-                type="button"
-                disabled={isVoting}
-                onClick={() => handleOnClick(index)}
-              >
-                Vote
-              </button>
+              <Group my="sm">
+                <Text>{option.text}</Text>
+                <Button
+                  type="button"
+                  disabled={isVoting}
+                  onClick={() => handleOnClick(index)}
+                >
+                  Vote
+                </Button>
+              </Group>
             </div>
           );
         })}
-      </div>
+      </Box>
     </div>
   );
 };
