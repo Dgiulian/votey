@@ -34,10 +34,12 @@ const QuestionCard = ({ question, copyToClipboard }: Props) => {
         border: theme.colors.dark[5],
       })}
     >
-      <Text weight={500} color="white">
+      <Text weight={500} color="white" size="xl">
         {question.question}
       </Text>
-      <Text color="dimmed">Created on {question.createdAt.toDateString()}</Text>
+      <Text color="dimmed" size="sm">
+        Created on {question.createdAt.toDateString()}
+      </Text>
       <div className={classes.cardActions}>
         <Link href={`/question/${question.id}`} passHref>
           <Text component="a" color="white" p={0}>

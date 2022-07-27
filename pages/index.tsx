@@ -29,7 +29,7 @@ const Home: NextPage = ({}) => {
 
   return (
     <div>
-      <Title order={3} mb="md" color="white">
+      <Title order={1} mb="md" color="white">
         Open questions
       </Title>
 
