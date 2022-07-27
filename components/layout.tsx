@@ -1,6 +1,8 @@
 import React from "react";
 
 import Head from "next/head";
+import Navbar from "./navbar";
+import { AppShell, Container, Header } from "@mantine/core";
 
 type Props = {
   children: React.ReactNode;
@@ -8,10 +10,22 @@ type Props = {
 
 const Layout = ({ children }: Props) => {
   return (
-    <div>
+    <AppShell
+      padding="md"
+      header={
+        <Header height={60} p="xs">
+          {<Navbar />}
+        </Header>
+      }
+      // styles={(theme) => ({
+      //   main: { backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0] },
+      // })}
+    >
       <Head>Votey | Share your opinion</Head>
-      <main>{children}</main>
-    </div>
+      <main>
+        <Container>{children}</Container>
+      </main>
+    </AppShell>
   );
 };
 

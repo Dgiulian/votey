@@ -10,10 +10,17 @@
     "prisma:studio": "dotenv -e .env.local prisma studio",
     "prisma:generate": "dotenv -e .env.local prisma generate",
     "prisma:push": "dotenv -e .env.local prisma db push",
+    "db:connect": "pscale connect votey dev",
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@emotion/react": "^11.9.3",
+    "@emotion/server": "^11.4.0",
     "@hookform/resolvers": "^2.9.6",
+    "@mantine/core": "^5.0.0",
+    "@mantine/form": "^5.0.0",
+    "@mantine/hooks": "^5.0.0",
+    "@mantine/next": "^5.0.0",
     "@prisma/client": "^4.1.0",
     "@trpc/client": "^9.26.2",
     "@trpc/next": "^9.26.2",

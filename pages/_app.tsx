@@ -4,12 +4,15 @@ import { AppRouter } from "../server/router";
 import superjson from "superjson";
 import Layout from "../components/layout";
 import "../styles/globals.css";
+import { MantineProvider } from "@mantine/core";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <MantineProvider>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </MantineProvider>
   );
 };
 

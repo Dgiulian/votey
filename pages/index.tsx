@@ -15,11 +15,6 @@ const Home: NextPage = ({}) => {
 
   return (
     <div>
-      <header>
-        <nav>
-          <Link href="/create">Create</Link>
-        </nav>
-      </header>
       <h1>Open questions</h1>
       <ul>
         {data.map((q) => (
