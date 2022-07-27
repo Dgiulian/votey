@@ -42,7 +42,7 @@ const CreateQuestionForm = () => {
   const { mutate, isLoading } = trpc.useMutation("questions.create", {
     onSuccess(data) {
       reset();
-      router.push(`/questions/${data.id}`);
+      router.push(`/question/${data.id}`);
     },
   });
 
