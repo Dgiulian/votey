@@ -8,6 +8,7 @@ import { ThemeContext } from "@emotion/react";
 
 type Props = {
   question: PollQuestion;
+  copyToClipboard: (question: PollQuestion) => void;
 };
 
 const useStyles = createStyles(() => ({
@@ -19,7 +20,7 @@ const useStyles = createStyles(() => ({
   },
 }));
 
-const QuestionCard = ({ question }: Props) => {
+const QuestionCard = ({ question, copyToClipboard }: Props) => {
   const { classes } = useStyles();
 
   return (
@@ -48,6 +49,7 @@ const QuestionCard = ({ question }: Props) => {
           leftIcon={<FiShare2 />}
           color="white"
           px={"md"}
+          onClick={() => copyToClipboard(question)}
         >
           Share
         </Button>

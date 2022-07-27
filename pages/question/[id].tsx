@@ -1,3 +1,4 @@
+import { Space, Text } from "@mantine/core";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React from "react";
@@ -90,8 +91,11 @@ function QuestionPage() {
   }
   return (
     <div>
-      <Link href="/">Home</Link>
       <QuestionPageContent id={id} />
+      <Space h="xl" />
+      <Link href="/" passHref>
+        <Text component="a">Go back</Text>
+      </Link>
     </div>
   );
 }
